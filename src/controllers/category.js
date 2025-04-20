@@ -5,8 +5,8 @@ const createCategory = async (req, res) => {
     try {
         const { name, slug } = req.body;
 
-        if (!name) {
-            res.status(400).json({ error: 'Name is required' });
+        if (!name || !slug) {
+            res.status(400).json({ error: 'name and slug is required' });
             return;
         }
 
@@ -63,8 +63,8 @@ const editCategoriesById = async (req, res) => {
         const categoryId = parseInt(req.params.id);
         const { name, slug } = req.body;
 
-        if (!name) {
-            res.status(400).json({ error: 'Name is required' });
+        if (!name || !slug) {
+            res.status(400).json({ error: 'name and slug is required' });
             return;
         }
 

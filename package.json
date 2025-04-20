@@ -7,9 +7,10 @@
     "prisma": "^5.18.0"
   },
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "npx nodemon index.js",
     "prisma": "npx prisma migrate dev --name init",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "primareset": "prisma migrate reset"
   },
   "peerDependencies": {
     "typescript": "^5.5.4"

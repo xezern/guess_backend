@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const prisma = require('../utils/prismaClient');
 
-const sendWelcomeEmail = require('../email/email');
+// const sendWelcomeEmail = require('../email/email');
 dotenv.config();
 
 
@@ -180,7 +180,7 @@ const deleteCart = async (req, res) => {
 
 const register = async (req, res) => {
     try {
-        const { name, user_img, username, phone, address, dob, gender, email, password } = req.body;
+        const { name, user_img, username, phone, address, dob, gender, email, password , role} = req.body;
 
         if (!name || !username || !phone || !gender || !email || !password) {
             return res.status(400).json({ error: 'All required fields must be filled' });
@@ -207,12 +207,13 @@ const register = async (req, res) => {
                 gender: gender.toUpperCase(),
                 email,
                 password: hashedPassword,
+                // role: "ADMIN"
             },
         });
 
         const token = jwt.sign({ userid: newUser.id }, process.env.JWT_SECRET, { expiresIn: '99999999h' });
 
-        await sendWelcomeEmail(newUser.email, newUser.name);
+        // await sendWelcomeEmail(newUser.email, newUser.name);
 
         res.status(201).json({ token, message: 'User registered successfully', user: newUser });
     } catch (error) {
