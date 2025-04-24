@@ -15,6 +15,6 @@ router.put('/:id', validateMiddleware(categorySchema), auth, adminAuth, editCate
 router.delete('/subcategory/:id', auth, adminAuth, deleteSubcategory);
 router.delete('/:id', auth, adminAuth, deleteCategoryById);
 
-router.post('/subcategory', validateMiddleware(subcategorySchema), auth, adminAuth, createSubcategory);
+router.post('/subcategory', auth, adminAuth, createSubcategory);
 
 module.exports = router;

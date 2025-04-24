@@ -23,11 +23,11 @@ const createCategory = async (req, res) => {
 
 const getCategories = async (req, res) => {
     try {
-        
+
         const categories = await prisma.category.findMany(
             {
                 include: {
-                    Subcategory: true
+                    subcategory: true
                 }
             }
         );
@@ -42,9 +42,11 @@ const getCategoriesById = async (req, res) => {
     try {
         const categoryId = parseInt(req.params.id);
 
+        if (typeof categoryId != "number") return res.status(400).json({ error: "Axtarilan id uzre categoriya yoxdur!" });
+
         const category = await prisma.category.findUnique({
             where: { id: categoryId },
-            include: { Subcategory: true }
+            include: { subcategory: true }
         });
 
         if (category) {
@@ -105,12 +107,17 @@ const deleteCategoryById = async (req, res) => {
 
 const createSubcategory = async (req, res) => {
     try {
-        const { name, categoryId, slug } = req.body;
+        const { name, slug } = req.body;
+
+        const categoryId = +req.body.categoryId
+
 
         if (!name || !categoryId) {
             res.status(400).json({ error: 'Name and Category ID are required' });
             return;
         }
+
+
 
         const newSubcategory = await prisma.subcategory.create({
             data: { name, categoryId, slug },

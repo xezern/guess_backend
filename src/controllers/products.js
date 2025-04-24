@@ -4,45 +4,60 @@ const prisma = new PrismaClient();
 
 
 const createProduct = async (req, res) => {
+    const validSizes = ["L", "M", "S", "XL", "XXL"]
+    const validColors = ["RED", "GREEN", "BLUE", "YELLOW", "BLACK", "WHITE", "ORANGE", "PURPLE", "INDIGO", "VIOLET"]
+
+
+
     try {
+
+        // Enum uyğunluğu yoxlaması
+        if (!Array.isArray(req.body.colors) || !req.body.colors.every(color => validColors.includes(color))) {
+            return res.status(400).json({
+                message: "Yanlış rəng dəyəri daxil edilib",
+                allowedColors: validColors
+            });
+        }
+
+        if (!Array.isArray(req.body.size) || !req.body.size.every(size => validSizes.includes(size))) {
+            return res.status(400).json({
+                message: "Yanlış ölçü dəyəri daxil edilib",
+                allowedSizes: validSizes
+            });
+        }
+
         console.log(req.body)
         const newProduct = await prisma.product.create({
             data: {
                 name: req.body.name,
                 description: req.body.description,
-                price: parseFloat(req.body.price), // Ensure price is a float
-                discount: parseInt(req.body.discount, 10), // Ensure discount is an integer
-                images: req.body.images, // Assuming this is an array of strings
-                categoryId: parseInt(req.body.categoryId, 10), // Ensure categoryId is an integer
-                subcategoryId: req.body.subcategoryId ? parseInt(req.body.subcategoryId, 10) : null, // Optional
-                brandsId: parseInt(req.body.brandsId, 10), // Ensure brandsId is an integer
-                Colors: req.body.colors, // This should be a valid eColors enum value
-                Size: req.body.size, // This should be a valid eSize enum value
+                price: parseFloat(req.body.price),
+                discount: parseInt(req.body.discount, 10),
+                images: req.body.images,
+                categoryId: parseInt(req.body.categoryId, 10),
+                subcategoryId: req.body.subcategoryId ? parseInt(req.body.subcategoryId, 10) : null,
+                brandsId: parseInt(req.body.brandsId, 10),
+                colors: req.body.colors,
+                size: req.body.size,
             },
         });
         res.status(201).json({ message: "Succses", newProduct });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to create product' });
+        if (error.code == "P2003") {
+            if (error.meta.field_name == "Product_brandsId_fkey (index)") return res.status(400).json({ message: "Bad request", error: "Daxil edilen id uzre brand yoxdur" });
+            if (error.meta.field_name == "Product_categoryId_fkey (index)") return res.status(400).json({ message: "Bad request", error: "Daxil edilen id uzre category yoxdur" });
+            if (error.meta.field_name == "Product_subcategoryId_fkey (index)") return res.status(400).json({ message: "Bad request", error: "Daxil edilen id uzre subcategory yoxdur" });
+
+            return res.status(400).json({ message: "Bad request", error: "Daxil edilen id-lərdə yanlisliq var" });
+        }
+        res.status(500).json({ error: 'Failed to create product', mesaj: error });
     }
 };
 
 const getProducts = async (req, res) => {
     try {
-        const {
-            page = 1,
-            limit = 10,
-            sortBy = 'price',
-            sortOrder = 'asc',
-            categoryId,
-            subcategoryId,
-            brandId,
-            color,
-            size,
-            minPrice,
-            maxPrice,
-            discount
-        } = req.query;
+        const { page = 1, limit = 10, sortBy = 'price', sortOrder = 'asc', categoryId, subcategoryId, brandId, color, size, minPrice, maxPrice, discount } = req.query;
 
         const pageNumber = parseInt(page, 10) || 1;
         const pageSize = parseInt(limit, 10) || 10;
@@ -58,7 +73,7 @@ const getProducts = async (req, res) => {
         if (brandId) where.brandsId = parseInt(brandId, 10);
 
         if (color) {
-            const colorsArray = color.split(',').map(c => c.trim().toUpperCase());
+            constcolorsArray = color.split(',').map(c => c.trim().toUpperCase());
             where.Colors = { hasSome: colorsArray };
         }
 
@@ -82,7 +97,7 @@ const getProducts = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,
+                brands: true,
             }
         });
 
@@ -110,7 +125,7 @@ const getProductById = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,
+                brands: true,
             }
         });
         if (product) res.status(200).json(product);
@@ -123,10 +138,12 @@ const getProductById = async (req, res) => {
 
 const deleteProductById = async (req, res) => {
     try {
-        await prisma.product.delete({
+        const silinen = await prisma.product.delete({
             where: { id: Number(req.params.id) }
         });
-        res.status(204).send();
+        return res.status(203).json({
+            message: "Melsul silindi!", silinen
+        });
     } catch (error) {
         console.error(error);
         if (error.code === 'P2025') {
@@ -153,7 +170,7 @@ const searchProduct = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,
+                brands: true,
             }
         });
 
@@ -184,13 +201,13 @@ const editProduct = async (req, res) => {
                 subcategory: {
                     connect: { id: req.body.subcategoryId }
                 },
-                Brands: {
+                brands: {
                     connect: { id: req.body.brandsId }
                 },
-                Colors: {
+                colors: {
                     set: req.body.colors
                 },
-                Size: {
+                size: {
                     set: req.body.size
                 },
             }
@@ -218,9 +235,9 @@ const getProductsByCategory = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,
-                Colors: true,
-                Size: true,
+                brands: true,
+                colors: true,
+                size: true,
                 User: true
             }
         });
@@ -242,9 +259,9 @@ const getProductsBySubcategory = async (req, res) => {
             include: {
                 category: true,
                 subcategory: true,
-                Brands: true,
-                Colors: true,
-                Size: true,
+                brands: true,
+                colors: true,
+                size: true,
                 User: true
             },
         });

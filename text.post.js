@@ -1,38 +1,43 @@
+// endpointler
+// /products 
+// /enums 
+// /categories 
+// /brands
+// /auth
+
+
+// login ucun 
+//  /auth/login e post gondereceksen :login objectini
+
+
+
+
 const products = {
-    "id": 70,
-    "name": "Green animal print onesie (3-12m)",
+    "name": "yeni 1",
     "description": "Roar your way through nap time with this playful Green Animal Print Onesie (3-12M). Featuring snap button closure and short sleeves, it's perfect for your little wild one (3-12 months). Get ready to take on the jungle (or the crib) in style with this adorable onesie.",
     "discount": 27,
     "price": 37.5,
-    "images": [],
-    "categoryId": 3,
-    "subcategoryId": 28,
-    "brandsId": 2,
-    "Colors": [],
-    "Size": [],
-    "createdTime": "2024-10-02T11:45:54.108Z",
-    "updatedTime": "2025-03-08T15:58:36.525Z",
-    "category": {
-        "id": 3,
-        "name": "Kids",
-        "slug": "kids"
-    },
-    "subcategory": {
-        "id": 28,
-        "name": "Baby boy",
-        "slug": "baby-boy",
-        "categoryId": 3
-    },
-    "Brands": {
-        "id": 2,
-        "name": "Kids",
-        "slug": "kids"
-    }
+    "images": [
+        "https://telefonclubb.s3.eu-central-1.amazonaws.com/1727869548654-P4GG00K6YW1-PI80-1.webp",
+        "https://telefonclubb.s3.eu-central-1.amazonaws.com/1727869552060-P4GG00K6YW1-PI80-2.webp",
+        "https://telefonclubb.s3.eu-central-1.amazonaws.com/1741449514365-449192871_995307275577657_334248010314168993_n.jpg"
+    ],
+    "categoryId": 1,
+    "subcategoryId": 1,
+    "brandsId": 1,
+    "colors": ["YELLOW", "WHITE"],
+    "size": ["S", "M", "L"]
 }
 
 
 const categories = {
     "name": "Green"
+}
+
+const subcategory = {
+    "name": "Canta",
+    "categoryId": "1",
+    "slug": "canta"
 }
 
 const register = {
@@ -43,3 +48,9 @@ const register = {
     "email": "xezernovruz79@gmail.com",
     "password": "Xezer1234"
 }
+
+const login = {
+    "username": "xezernn",
+    "password": "Xezer1234"
+}
+
