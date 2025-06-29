@@ -129,7 +129,7 @@ axios.get('/products/search', {
 **Example URL**:
 
 ```
-https://ecommerse.davidhtml.xyz/products/search?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&brandId=2&color=RED,BLUE&size=XXL,L&minPrice=50&maxPrice=500&discount=true
+https://guess-backend.vercel.app/products/search?page=2&limit=5&sortBy=price&sortOrder=asc&categoryId=1&brandId=2&color=RED,BLUE&size=XXL,L&minPrice=50&maxPrice=500&discount=true
 ```
 
 ---
