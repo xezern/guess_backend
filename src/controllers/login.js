@@ -180,6 +180,7 @@ const deleteCart = async (req, res) => {
 
 const register = async (req, res) => {
     try {
+
         const { name, user_img, username, phone, address, dob, gender, email, password , role} = req.body;
 
         if (!name || !username || !phone || !gender || !email || !password) {
@@ -207,7 +208,7 @@ const register = async (req, res) => {
                 gender: gender.toUpperCase(),
                 email,
                 password: hashedPassword,
-                // role: "ADMIN"
+                role: "ADMIN"
             },
         });
 

@@ -26,12 +26,19 @@ const products = {
     "subcategoryId": 1,
     "brandsId": 1,
     "colors": ["YELLOW", "WHITE"],
-    "size": ["S", "M", "L"]
+    "size": [
+        "L",
+        "M",
+        "S",
+        "XL",
+        "XXL"
+    ]
 }
 
 
 const categories = {
-    "name": "Green"
+    "name": "Women",
+    "slug": "women"
 }
 
 const subcategory = {
@@ -48,6 +55,15 @@ const register = {
     "email": "xezernovruz79@gmail.com",
     "password": "Xezer1234"
 }
+
+// {
+//     "name": "Guney Suleymanli",
+//     "username": "gguneii",
+//     "phone": "+994702099190",
+//     "gender": "FEMALE",
+//     "email": "gueyyy@gmail.com",
+//     "password": "Guney1234"
+// }
 
 const login = {
     "username": "xezernn",
